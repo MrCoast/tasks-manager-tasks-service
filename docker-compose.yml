@@ -18,8 +18,8 @@ services:
         volumes:
             - .:/var/www
         depends_on:
-            - db
-    db:
+            - database
+    database:
         image: mysql:8
         entrypoint: ['/entrypoint.sh', '--default-authentication-plugin=mysql_native_password']
         environment:
