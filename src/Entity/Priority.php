@@ -35,7 +35,7 @@ class Priority
 
     /**
      * @param string $title
-    */
+     */
     public function __construct(string $title)
     {
         $this->title = $title;

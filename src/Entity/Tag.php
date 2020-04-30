@@ -51,6 +51,14 @@ class Tag
     private $updatedAt;
 
     /**
+     * @param string $title
+     */
+    public function __construct(string $title)
+    {
+        $this->title = $title;
+    }
+
+    /**
      * @return int|null
      */
     public function getId(): ?int
