@@ -2,7 +2,12 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Mapping\Annotation as Gedmo;
+use App\Entity\Tag;
+use App\Entity\Priority;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\TaskRepository")
@@ -10,6 +15,8 @@ use Doctrine\ORM\Mapping as ORM;
 class Task
 {
     /**
+     * @var int $id
+     * 
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
@@ -17,24 +24,169 @@ class Task
     private $id;
 
     /**
+     * @var string $title
+     * 
      * @ORM\Column(type="string", length=255)
      */
-    private $Title;
+    private $title;
 
+    /**
+     * @var Tag[] $tags
+     * 
+     * @ORM\ManyToMany(targetEntity="Tag", inversedBy="tasks", cascade={"persist"})
+     */
+    private $tags;
+
+    /**
+     * @var Priority $priority
+     * 
+     * @ORM\ManyToOne(targetEntity="Priority", inversedBy="tasks")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $priority;
+
+    /**
+     * @var string $description
+     * 
+     * @ORM\Column(type="text")
+     */
+    private $description;
+
+    /**
+     * @var \DateTime $created
+     *
+     * @Gedmo\Timestampable(on="create")
+     * @ORM\Column(type="datetime")
+     */
+    private $createdAt;
+
+    /**
+     * @var \DateTime $updated
+     *
+     * @Gedmo\Timestampable(on="update")
+     * @ORM\Column(type="datetime")
+     */
+    private $updatedAt;
+
+    public function __construct()
+    {
+        $this->tags = new ArrayCollection();
+    }
+
+    /**
+     * @return int|null
+     */
     public function getId(): ?int
     {
         return $this->id;
     }
 
+    /**
+     * @return string|null
+     */
     public function getTitle(): ?string
     {
-        return $this->Title;
+        return $this->title;
     }
 
-    public function setTitle(string $Title): self
+    /**
+     * @param string $title
+     * @return self
+     */
+    public function setTitle(string $title): self
     {
-        $this->Title = $Title;
+        $this->title = $title;
 
         return $this;
+    }
+
+    /**
+     * @return Collection
+     */
+    public function getTags(): Collection
+    {
+        return $this->tags;
+    }
+
+    /**
+     * @param Tag $tag
+     * @return self
+     */
+    public function addTag(Tag $tag): self
+    {
+        if (!$this->tags->contains($tag)) {
+            $this->tags->add($tag);
+            $tag->addTask($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param Tag $tag
+     * @return self
+     */
+    public function removeTag(Tag $tag): self
+    {
+        if ($this->tags->contains($tag)) {
+            $this->tags->removeElement($tag);
+            $tag->removeTask($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Priority|null
+     */
+    public function getPriority(): ?Priority
+    {
+        return $this->priority;
+    }
+
+    /**
+     * @param Priority $priority
+     * @return self
+     */
+    public function setPriority(Priority $priority): self
+    {
+        $this->priority = $priority;
+
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getDescription(): ?string
+    {
+        return $this->description;
+    }
+
+    /**
+     * @param string $description
+     * @return self
+     */
+    public function setDescription(string $description): self
+    {
+        $this->description = $description;
+
+        return $this;
+    }
+
+    /**
+     * @return DateTime|null
+     */
+    public function getCreatedAt(): ?\DateTime
+    {
+        return $this->createdAt;
+    }
+
+    /**
+     * @return DateTime|null
+     */
+    public function getUpdatedAt(): ?\DateTime
+    {
+        return $this->updatedAt;
     }
 }
