@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use App\Entity\Task;
 
@@ -27,7 +29,7 @@ class Priority
     private $title;
 
     /**
-     * @var Task[] $tasks
+     * @var Collection<Task> $tasks
      *
      * @ORM\OneToMany(targetEntity="Task", mappedBy="priority")
      */
@@ -39,6 +41,7 @@ class Priority
     public function __construct(string $title)
     {
         $this->title = $title;
+        $this->tasks = new ArrayCollection();
     }
 
     /**
@@ -55,5 +58,13 @@ class Priority
     public function getTitle(): ?string
     {
         return $this->title;
+    }
+
+    /**
+     * @return Collection
+     */
+    public function getTasks(): Collection
+    {
+        return $this->tasks;
     }
 }

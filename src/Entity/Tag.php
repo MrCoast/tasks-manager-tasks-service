@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use App\Entity\Task;
@@ -28,7 +30,7 @@ class Tag
     private $title;
 
     /**
-     * @var Task[] $tasks
+     * @var Collection<Task> $tasks
      *
      * @ORM\ManyToMany(targetEntity="Task", mappedBy="tags", cascade={"persist"})
      */
@@ -56,6 +58,7 @@ class Tag
     public function __construct(string $title)
     {
         $this->title = $title;
+        $this->tasks = new ArrayCollection();
     }
 
     /**

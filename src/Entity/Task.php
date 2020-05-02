@@ -31,7 +31,7 @@ class Task
     private $title;
 
     /**
-     * @var Tag[] $tags
+     * @var Collection<Tag> $tags
      *
      * @ORM\ManyToMany(targetEntity="Tag", inversedBy="tasks", cascade={"persist"})
      */
