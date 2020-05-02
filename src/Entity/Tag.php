@@ -13,7 +13,7 @@ class Tag
 {
     /**
      * @var int $id
-     * 
+     *
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
@@ -22,14 +22,14 @@ class Tag
 
     /**
      * @var string $title
-     * 
+     *
      * @ORM\Column(type="string", length=255, unique=true)
      */
     private $title;
 
     /**
      * @var Task[] $tasks
-     * 
+     *
      * @ORM\ManyToMany(targetEntity="Task", mappedBy="tags", cascade={"persist"})
      */
     private $tasks;

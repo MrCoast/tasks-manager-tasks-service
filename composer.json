@@ -15,6 +15,7 @@
     },
     "require-dev": {
         "doctrine/doctrine-fixtures-bundle": "^3.3",
+        "squizlabs/php_codesniffer": "*",
         "symfony/maker-bundle": "^1.15"
     },
     "config": {

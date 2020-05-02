@@ -12,7 +12,7 @@ class Priority
 {
     /**
      * @var int $id
-     * 
+     *
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
@@ -21,14 +21,14 @@ class Priority
 
     /**
      * @var string $title
-     * 
+     *
      * @ORM\Column(type="string", length=255, unique=true)
      */
     private $title;
 
     /**
      * @var Task[] $tasks
-     * 
+     *
      * @ORM\OneToMany(targetEntity="Task", mappedBy="priority")
      */
     private $tasks;

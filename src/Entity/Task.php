@@ -16,7 +16,7 @@ class Task
 {
     /**
      * @var int $id
-     * 
+     *
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
@@ -25,21 +25,21 @@ class Task
 
     /**
      * @var string $title
-     * 
+     *
      * @ORM\Column(type="string", length=255)
      */
     private $title;
 
     /**
      * @var Tag[] $tags
-     * 
+     *
      * @ORM\ManyToMany(targetEntity="Tag", inversedBy="tasks", cascade={"persist"})
      */
     private $tags;
 
     /**
      * @var Priority $priority
-     * 
+     *
      * @ORM\ManyToOne(targetEntity="Priority", inversedBy="tasks")
      * @ORM\JoinColumn(nullable=false)
      */
@@ -47,7 +47,7 @@ class Task
 
     /**
      * @var string $description
-     * 
+     *
      * @ORM\Column(type="text")
      */
     private $description;

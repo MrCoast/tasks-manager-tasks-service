@@ -24,3 +24,11 @@ docker-compose run -u $(id -u):$(id -g) php bin/console doctrine:fixtures:load -
 ```bash
 docker run -it --network doclertest_default --rm mysql:8 mysql -h'database' -u'tasks' -p'tasks' tasks
 ```
+
+### Run code sniffer
+```bash
+# phpcs
+docker-compose run -u $(id -u):$(id -g) php vendor/bin/phpcs src
+# phpcbf
+docker-compose run -u $(id -u):$(id -g) php vendor/bin/phpcbf src
+```
