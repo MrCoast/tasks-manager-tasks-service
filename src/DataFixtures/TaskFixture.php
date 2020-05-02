@@ -2,63 +2,41 @@
 
 namespace App\DataFixtures;
 
+use App\Entity\Priority;
+use App\Entity\State;
 use App\Entity\Tag;
+use App\Entity\Task;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\Persistence\ObjectManager;
-use App\Entity\Task;
-use App\Repository\PriorityRepository;
-use App\Repository\StateRepository;
-use App\Repository\TagRepository;
+use Doctrine\ORM\EntityManagerInterface;
 
 class TaskFixture extends Fixture
 {
-    private const TASK_DEFINITIONS = [
-        [
-            'title' => 'breakfast',
-            'tags' => ['home'],
-            'priority' => 'high',
-            'state' => 'To Do',
-            'description' => 'very tasty breaskfast',
-        ],
-        [
-            'title' => 'read news',
-            'tags' => ['home', 'finance'],
-            'priority' => 'moderate',
-            'state' => 'To Do',
-            'description' => 'read Telegram channels, watch YouTube',
-        ],
-        [
-            'title' => 'chat with friends',
-            'tags' => ['home'],
-            'priority' => 'low',
-            'state' => 'To Do',
-            'description' => 'use Telegram',
-        ],
-        [
-            'title' => 'create daily agenda',
-            'tags' => ['jobs'],
-            'priority' => 'high',
-            'state' => 'In Analysis',
-            'description' => 'use iPhone Notes app',
-        ],
-    ];
-
+    /**
+     * @var \App\Repository\TagRepository
+     */
     private $tagRepository;
 
+    /**
+     * @var \App\Repository\PriorityRepository
+     */
     private $priorityRepository;
 
+    /**
+     * @var \App\Repository\StateRepository
+     */
     private $stateRepository;
 
-    public function __construct(TagRepository $tagRepository, PriorityRepository $priorityRepository, StateRepository $stateRepository)
+    public function __construct(EntityManagerInterface $manager)
     {
-        $this->tagRepository = $tagRepository;
-        $this->priorityRepository = $priorityRepository;
-        $this->stateRepository = $stateRepository;
+        $this->tagRepository = $manager->getRepository(Tag::class);
+        $this->priorityRepository = $manager->getRepository(Priority::class);
+        $this->stateRepository = $manager->getRepository(State::class);
     }
 
     public function load(ObjectManager $manager)
     {
-        foreach (self::TASK_DEFINITIONS as $taskDefinition) {
+        foreach ($this->getTaskDefinitions() as $taskDefinition) {
             $task = $this->getEntityFromDefinition($taskDefinition);
             $manager->persist($task);
         }
@@ -89,5 +67,39 @@ class TaskFixture extends Fixture
         $task->setDescription($definition['description']);
 
         return $task;
+    }
+
+    private function getTaskDefinitions(): array
+    {
+        return [
+            [
+                'title' => 'breakfast',
+                'tags' => ['home'],
+                'priority' => 'high',
+                'state' => 'To Do',
+                'description' => 'very tasty breaskfast',
+            ],
+            [
+                'title' => 'read news',
+                'tags' => ['home', 'finance'],
+                'priority' => 'moderate',
+                'state' => 'To Do',
+                'description' => 'read Telegram channels, watch YouTube',
+            ],
+            [
+                'title' => 'chat with friends',
+                'tags' => ['home'],
+                'priority' => 'low',
+                'state' => 'To Do',
+                'description' => 'use Telegram',
+            ],
+            [
+                'title' => 'create daily agenda',
+                'tags' => ['jobs'],
+                'priority' => 'high',
+                'state' => 'In Analysis',
+                'description' => 'use iPhone Notes app',
+            ],
+        ];
     }
 }
