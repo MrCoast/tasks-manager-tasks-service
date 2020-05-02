@@ -8,6 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use App\Entity\Tag;
 use App\Entity\Priority;
+use App\Entity\State;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\TaskRepository")
@@ -46,6 +47,14 @@ class Task
     private $priority;
 
     /**
+     * @var State $state
+     *
+     * @ORM\ManyToOne(targetEntity="State", inversedBy="tasks")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $state;
+
+    /**
      * @var string $description
      *
      * @ORM\Column(type="text")
@@ -68,8 +77,12 @@ class Task
      */
     private $updatedAt;
 
-    public function __construct()
+    /**
+     * @param string $title
+     */
+    public function __construct(string $title)
     {
+        $this->title = $title;
         $this->tags = new ArrayCollection();
     }
 
@@ -151,6 +164,25 @@ class Task
     public function setPriority(Priority $priority): self
     {
         $this->priority = $priority;
+
+        return $this;
+    }
+
+    /**
+     * @return State|null
+     */
+    public function getState(): ?State
+    {
+        return $this->state;
+    }
+
+    /**
+     * @param State $state
+     * @return self
+     */
+    public function setState(State $state): self
+    {
+        $this->state = $state;
 
         return $this;
     }

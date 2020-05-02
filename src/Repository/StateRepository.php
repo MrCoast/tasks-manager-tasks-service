@@ -2,7 +2,7 @@
 
 namespace App\Repository;
 
-use App\Entity\Priority;
+use App\Entity\State;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -12,14 +12,14 @@ use Doctrine\Persistence\ManagerRegistry;
  * @method Tag[]    findAll()
  * @method Tag[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class PriorityRepository extends ServiceEntityRepository
+class StateRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {
-        parent::__construct($registry, Priority::class);
+        parent::__construct($registry, State::class);
     }
 
-    public function findOneByTitle(string $title): ?Priority
+    public function findOneByTitle(string $title): ?State
     {
         return $this->findOneBy(['title' => $title]);
     }
