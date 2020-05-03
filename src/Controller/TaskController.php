@@ -29,7 +29,7 @@ class TaskController
     }
 
     /**
-     * @Route("/", name="list", methods={"GET"})
+     * @Route("", name="list", methods={"GET"})
      *
      * @return JsonResponse
      */
@@ -61,5 +61,28 @@ class TaskController
         $data = $this->serializer->normalize($task);
 
         return new JsonResponse($data, Response::HTTP_OK);
+    }
+
+    /**
+     * @Route("/{id}", name="delete", requirements={"id"="\d+"}, methods={"DELETE"})
+     *
+     * @param int $id
+     *
+     * @return JsonResponse
+     *
+     * @throws NotFoundHttpException
+     */
+    public function delete(int $id): JsonResponse
+    {
+        $task = $this->manager->getRepository(Task::class)->find($id);
+
+        if ($task === null) {
+            throw new NotFoundHttpException(sprintf('Task #%d not found', $id));
+        }
+
+        $task = $this->manager->remove($task);
+        $this->manager->flush();
+
+        return new JsonResponse(['status' => 'OK'], Response::HTTP_OK);
     }
 }
