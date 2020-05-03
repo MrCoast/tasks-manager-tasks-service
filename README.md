@@ -36,3 +36,9 @@ docker-compose run -u $(id -u):$(id -g) php vendor/bin/phpcbf src
 ### Swagger UI
 
 In web browser, go to http://localhost:8080/api/doc.
+
+### Testing
+```bash
+# run PHPUnit
+docker-compose run -u $(id -u):$(id -g) php bin/phpunit
+```
