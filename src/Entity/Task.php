@@ -2,13 +2,13 @@
 
 namespace App\Entity;
 
+use App\Entity\Tag;
+use App\Entity\Priority;
+use App\Entity\State;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
-use App\Entity\Tag;
-use App\Entity\Priority;
-use App\Entity\State;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\TaskRepository")

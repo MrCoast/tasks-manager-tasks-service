@@ -11,6 +11,11 @@ use Symfony\Component\Serializer\Serializer;
 
 class TaskSerializer implements SerializerInterface
 {
+    /**
+     * @var Serializer
+     */
+    private $serializer;
+
     public function __construct()
     {
         $normalizers = [$this->getNormalizer()];
@@ -19,16 +24,33 @@ class TaskSerializer implements SerializerInterface
         $this->serializer = new Serializer($normalizers, $encoders);
     }
 
+    /**
+     * @param object $data
+     * @param string $format
+     * @param array $context
+     *
+     * @return string
+     */
     public function serialize($data, string $format = 'json', array $context = []): string
     {
         return $this->serializer->serialize($data, $format, $context);
     }
 
+    /**
+     * @param object $data
+     * @param string $format
+     * @param array $context
+     *
+     * @return mixed
+     */
     public function normalize($data, string $format = 'json', array $context = [])
     {
         return $this->serializer->normalize($data, $format, $context);
     }
 
+    /**
+     * @return array
+     */
     private function getDefaultContent(): array
     {
         $circularReferenceCallback = function ($object) {
@@ -65,6 +87,9 @@ class TaskSerializer implements SerializerInterface
         ];
     }
 
+    /**
+     * @return NormalizerInterface
+     */
     private function getNormalizer(): NormalizerInterface
     {
         $classMetadataFactory = null;

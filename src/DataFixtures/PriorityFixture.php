@@ -2,14 +2,17 @@
 
 namespace App\DataFixtures;
 
+use App\Entity\Priority;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\Persistence\ObjectManager;
-use App\Entity\Priority;
 
 class PriorityFixture extends Fixture
 {
     private const PRIORITY_TITLES = ['low', 'moderate', 'high'];
 
+    /**
+     * @param ObjectManager $manager
+     */
     public function load(ObjectManager $manager)
     {
         foreach (self::PRIORITY_TITLES as $priorityTitle) {

@@ -34,6 +34,9 @@ class TaskFixture extends Fixture
         $manager->flush();
     }
 
+    /**
+     * @return array
+     */
     private function getTaskDefinitions(): array
     {
         return [
