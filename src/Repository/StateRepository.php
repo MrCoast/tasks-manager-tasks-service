@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\State;
+use App\Repository\Common\TitledEntityRepositoryTrait;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -14,13 +15,10 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class StateRepository extends ServiceEntityRepository
 {
+    use TitledEntityRepositoryTrait;
+
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, State::class);
-    }
-
-    public function findOneByTitle(string $title): ?State
-    {
-        return $this->findOneBy(['title' => $title]);
     }
 }
