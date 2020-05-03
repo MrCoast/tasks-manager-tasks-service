@@ -30,3 +30,4 @@ services:
     App\Service\Serializer\SerializerInterface: '@App\Service\Serializer\TaskSerializer'
     App\Service\Deserializer\DeserializerInterface: '@App\Service\Deserializer\TaskDeserializer'
     App\Service\EntityUpdater\EntityUpdaterInterface: '@App\Service\EntityUpdater\TaskUpdater'
+    App\Service\Search\RequestProcessorInterface: '@App\Service\Search\RequestProcessor'

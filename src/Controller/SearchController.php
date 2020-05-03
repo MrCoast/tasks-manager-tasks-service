@@ -5,7 +5,7 @@ namespace App\Controller;
 use App\Entity\Priority;
 use App\Entity\State;
 use App\Entity\Task;
-use App\Service\Search\RequestProcessor;
+use App\Service\Search\RequestProcessorInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
@@ -16,14 +16,14 @@ use Symfony\Component\Routing\Annotation\Route;
 class SearchController
 {
     /**
-     * @var RequestProcessor
+     * @var RequestProcessorInterface
      */
     private $requestProcessor;
 
     /**
-     * @param RequestProcessor $requestProcessor
+     * @param RequestProcessorInterface $requestProcessor
      */
-    public function __construct(RequestProcessor $requestProcessor)
+    public function __construct(RequestProcessorInterface $requestProcessor)
     {
         $this->requestProcessor = $requestProcessor;
     }

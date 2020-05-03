@@ -6,7 +6,7 @@ use App\Entity\Task;
 use App\Service\Serializer\SerializerInterface;
 use App\Service\Deserializer\DeserializerInterface;
 use App\Service\EntityUpdater\EntityUpdaterInterface;
-use App\Service\Search\RequestProcessor;
+use App\Service\Search\RequestProcessorInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -40,7 +40,7 @@ class TaskController
     private $updater;
 
     /**
-     * @var RequestProcessor
+     * @var RequestProcessorInterface
      */
     private $requestProcessor;
 
@@ -49,14 +49,14 @@ class TaskController
      * @param SerializerInterface $serializer
      * @param DeserializerInterface $deserializer
      * @param EntityUpdaterInterface $updater
-     * @param RequestProcessor $requestProcessor
+     * @param RequestProcessorInterface $requestProcessor
      */
     public function __construct(
         EntityManagerInterface $manager,
         SerializerInterface $serializer,
         DeserializerInterface $deserializer,
         EntityUpdaterInterface $updater,
-        RequestProcessor $requestProcessor
+        RequestProcessorInterface $requestProcessor
     ) {
         $this->manager = $manager;
         $this->serializer = $serializer;
