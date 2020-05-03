@@ -6,6 +6,7 @@ use App\Entity\Task;
 use App\Service\Serializer\SerializerInterface;
 use App\Service\Deserializer\DeserializerInterface;
 use App\Service\EntityUpdater\EntityUpdaterInterface;
+use App\Service\Search\RequestProcessor;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -39,18 +40,29 @@ class TaskController
     private $updater;
 
     /**
-     * @param TaskRepository $taskRepository
+     * @var RequestProcessor
+     */
+    private $requestProcessor;
+
+    /**
+     * @param EntityManagerInterface $manager
+     * @param SerializerInterface $serializer
+     * @param DeserializerInterface $deserializer
+     * @param EntityUpdaterInterface $updater
+     * @param RequestProcessor $requestProcessor
      */
     public function __construct(
         EntityManagerInterface $manager,
         SerializerInterface $serializer,
         DeserializerInterface $deserializer,
-        EntityUpdaterInterface $updater
+        EntityUpdaterInterface $updater,
+        RequestProcessor $requestProcessor
     ) {
         $this->manager = $manager;
         $this->serializer = $serializer;
         $this->deserializer = $deserializer;
         $this->updater = $updater;
+        $this->requestProcessor = $requestProcessor;
     }
 
     /**
@@ -62,21 +74,9 @@ class TaskController
      */
     public function list(Request $request): JsonResponse
     {
-        $limit = $request->query->get('limit', 20);
-        $offset = $request->query->get('offset', 0);
-
         $criteria = [];
-        $orderBy = null;
-        $tasks = $this->manager->getRepository(Task::class)->findBy(
-            $criteria,
-            $orderBy,
-            $limit,
-            $offset
-        );
 
-        $data = $this->serializer->normalize($tasks);
-
-        return new JsonResponse($data, Response::HTTP_OK);
+        return $this->requestProcessor->process($request, Task::class, $criteria);
     }
 
     /**
