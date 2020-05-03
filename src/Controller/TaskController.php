@@ -56,11 +56,24 @@ class TaskController
     /**
      * @Route("", name="list", methods={"GET"})
      *
+     * @param Request $request
+     *
      * @return JsonResponse
      */
-    public function list(): JsonResponse
+    public function list(Request $request): JsonResponse
     {
-        $tasks = $this->manager->getRepository(Task::class)->findAll();
+        $limit = $request->query->get('limit', 20);
+        $offset = $request->query->get('offset', 0);
+
+        $criteria = [];
+        $orderBy = null;
+        $tasks = $this->manager->getRepository(Task::class)->findBy(
+            $criteria,
+            $orderBy,
+            $limit,
+            $offset
+        );
+
         $data = $this->serializer->normalize($tasks);
 
         return new JsonResponse($data, Response::HTTP_OK);
