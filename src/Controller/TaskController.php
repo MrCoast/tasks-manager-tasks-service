@@ -18,12 +18,24 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class TaskController
 {
+    /**
+     * @var EntityManagerInterface
+     */
     private $manager;
 
+    /**
+     * @var SerializerInterface
+     */
     private $serializer;
 
+    /**
+     * @var DeserializerInterface
+     */
     private $deserializer;
 
+    /**
+     * @var EntityUpdaterInterface
+     */
     private $updater;
 
     /**
