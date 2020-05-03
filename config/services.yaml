@@ -26,6 +26,7 @@ services:
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
 
+    App\DataFixtures\Common\EntityLoaderInterface: '@App\DataFixtures\Common\TitledEntityLoader'
     App\Service\Serializer\SerializerInterface: '@App\Service\Serializer\TaskSerializer'
     App\Service\Deserializer\DeserializerInterface: '@App\Service\Deserializer\TaskDeserializer'
     App\Service\EntityUpdater\EntityUpdaterInterface: '@App\Service\EntityUpdater\TaskUpdater'
