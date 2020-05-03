@@ -7,6 +7,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use App\Service\Serializer\SerializerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
@@ -29,11 +30,35 @@ class TaskController
 
     /**
      * @Route("/", name="list", methods={"GET"})
+     *
+     * @return JsonResponse
      */
-    public function list()
+    public function list(): JsonResponse
     {
         $tasks = $this->manager->getRepository(Task::class)->findAll();
         $data = $this->serializer->normalize($tasks);
+
+        return new JsonResponse($data, Response::HTTP_OK);
+    }
+
+    /**
+     * @Route("/{id}", name="get_one", requirements={"id"="\d+"}, methods={"GET"})
+     *
+     * @param int $id
+     *
+     * @return JsonResponse
+     *
+     * @throws NotFoundHttpException
+     */
+    public function getOne(int $id): JsonResponse
+    {
+        $task = $this->manager->getRepository(Task::class)->find($id);
+
+        if ($task === null) {
+            throw new NotFoundHttpException(sprintf('Task #%d not found', $id));
+        }
+
+        $data = $this->serializer->normalize($task);
 
         return new JsonResponse($data, Response::HTTP_OK);
     }
