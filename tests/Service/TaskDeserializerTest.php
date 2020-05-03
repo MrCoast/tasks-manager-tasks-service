@@ -35,7 +35,9 @@ class TaskDeserializerTest extends TestCase
     private function getTaskMapperMock(): MockObject
     {
         $taskMapper = $this->createMock(TaskMapper::class);
-        $taskMapper->method('map')->willReturn(new Task(self::TEST_TASK_TITLE));
+        $taskMapper
+            ->method('map')
+            ->willReturn(new Task(self::TEST_TASK_TITLE));
 
         return $taskMapper;
     }
