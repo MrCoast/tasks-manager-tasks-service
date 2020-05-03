@@ -27,3 +27,4 @@ services:
     # please note that last definitions always *replace* previous ones
 
     App\Service\Serializer\SerializerInterface: '@App\Service\Serializer\TaskSerializer'
+    App\Service\Deserializer\DeserializerInterface: '@App\Service\Deserializer\TaskDeserializer'

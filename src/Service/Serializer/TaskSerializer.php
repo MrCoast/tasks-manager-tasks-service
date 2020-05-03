@@ -2,7 +2,6 @@
 
 namespace App\Service\Serializer;
 
-use App\Service\Serializer\SerializerInterface;
 use Doctrine\Common\Collections\Collection;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;

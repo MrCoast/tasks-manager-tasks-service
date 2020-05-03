@@ -3,9 +3,11 @@
 namespace App\Controller;
 
 use App\Entity\Task;
-use Doctrine\ORM\EntityManagerInterface;
 use App\Service\Serializer\SerializerInterface;
+use App\Service\Deserializer\DeserializerInterface;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
@@ -19,13 +21,19 @@ class TaskController
 
     private $serializer;
 
+    private $deserializer;
+
     /**
      * @param TaskRepository $taskRepository
      */
-    public function __construct(EntityManagerInterface $manager, SerializerInterface $serializer)
-    {
+    public function __construct(
+        EntityManagerInterface $manager,
+        SerializerInterface $serializer,
+        DeserializerInterface $deserializer
+    ) {
         $this->manager = $manager;
         $this->serializer = $serializer;
+        $this->deserializer = $deserializer;
     }
 
     /**
@@ -81,6 +89,22 @@ class TaskController
         }
 
         $task = $this->manager->remove($task);
+        $this->manager->flush();
+
+        return new JsonResponse(['status' => 'OK'], Response::HTTP_OK);
+    }
+
+    /**
+     * @Route("", name="create", methods={"PUT"})
+     *
+     * @return JsonResponse
+     */
+    public function create(Request $request): JsonResponse
+    {
+        $jsonData = $request->getContent();
+        $task = $this->deserializer->deserialize($jsonData);
+
+        $this->manager->persist($task);
         $this->manager->flush();
 
         return new JsonResponse(['status' => 'OK'], Response::HTTP_OK);
