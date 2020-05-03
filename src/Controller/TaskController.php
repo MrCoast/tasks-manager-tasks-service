@@ -244,6 +244,8 @@ class TaskController
      * @param int $id
      * @param Request $request
      *
+     * @throws NotFoundHttpException
+     *
      * @return JsonResponse
      */
     public function update(int $id, Request $request): JsonResponse
