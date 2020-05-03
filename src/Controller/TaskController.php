@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Task;
 use App\Service\Serializer\SerializerInterface;
 use App\Service\Deserializer\DeserializerInterface;
+use App\Service\EntityUpdater\EntityUpdaterInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -23,17 +24,21 @@ class TaskController
 
     private $deserializer;
 
+    private $updater;
+
     /**
      * @param TaskRepository $taskRepository
      */
     public function __construct(
         EntityManagerInterface $manager,
         SerializerInterface $serializer,
-        DeserializerInterface $deserializer
+        DeserializerInterface $deserializer,
+        EntityUpdaterInterface $updater
     ) {
         $this->manager = $manager;
         $this->serializer = $serializer;
         $this->deserializer = $deserializer;
+        $this->updater = $updater;
     }
 
     /**
@@ -50,7 +55,7 @@ class TaskController
     }
 
     /**
-     * @Route("/{id}", name="get_one", requirements={"id"="\d+"}, methods={"GET"})
+     * @Route("/{id}", name="get", requirements={"id"="\d+"}, methods={"GET"})
      *
      * @param int $id
      *
@@ -58,7 +63,7 @@ class TaskController
      *
      * @throws NotFoundHttpException
      */
-    public function getOne(int $id): JsonResponse
+    public function get(int $id): JsonResponse
     {
         $task = $this->manager->getRepository(Task::class)->find($id);
 
@@ -95,7 +100,9 @@ class TaskController
     }
 
     /**
-     * @Route("", name="create", methods={"PUT"})
+     * @Route("", name="create", methods={"POST"})
+     *
+     * @param Request $request
      *
      * @return JsonResponse
      */
@@ -105,6 +112,38 @@ class TaskController
         $task = $this->deserializer->deserialize($jsonData);
 
         $this->manager->persist($task);
+        $this->manager->flush();
+
+        return new JsonResponse(['status' => 'OK'], Response::HTTP_OK);
+    }
+
+    /**
+     * @Route("/{id}", name="update", requirements={"id"="\d+"}, methods={"PUT"})
+     *
+     * @param int $id
+     * @param Request $request
+     *
+     * @return JsonResponse
+     */
+    public function update(int $id, Request $request): JsonResponse
+    {
+        $jsonData = $request->getContent();
+
+        /**
+         * @var Task
+         */
+        $existingTask = $this->manager->getRepository(Task::class)->find($id);
+
+        if ($existingTask === null) {
+            throw new NotFoundHttpException(sprintf('Task #%d not found', $id));
+        }
+
+        /**
+         * @var Task
+         */
+        $newTask = $this->deserializer->deserialize($jsonData);
+
+        $this->updater->update($existingTask, $newTask);
         $this->manager->flush();
 
         return new JsonResponse(['status' => 'OK'], Response::HTTP_OK);

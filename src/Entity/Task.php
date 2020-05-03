@@ -150,6 +150,16 @@ class Task
     }
 
     /**
+     * @return self
+     */
+    public function clearTags(): self
+    {
+        $this->tags = new ArrayCollection();
+
+        return $this;
+    }
+
+    /**
      * @return Priority|null
      */
     public function getPriority(): ?Priority
